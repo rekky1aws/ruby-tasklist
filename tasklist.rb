@@ -1,8 +1,8 @@
 #! /usr/local/bin/ruby
 
-require './task.rb'
-require './to_bool.rb'
-require './lib.rb'
+require './classes/task.rb'
+require './libs/to_bool.rb'
+require './libs/lib.rb'
 
 tasklist = []
 
@@ -143,14 +143,14 @@ if load_location == ""
 end
 
 # Creating file if not existing
-if !File.exist?(load_location)
-	File.write(load_location, "")
+if !File.exist?("data/" + load_location)
+	File.write("data/" + load_location, "")
 end
 
 # Reading file to get saved tasks
-tasklist = get_stored_tasks(load_location)
+tasklist = get_stored_tasks("data/" + load_location)
 
-puts "Loaded tasks from #{load_location}\n\n"
+puts "Loaded tasks from data/#{load_location}\n\n"
 
 choice = -1
 while choice !=0
@@ -164,9 +164,7 @@ while choice !=0
 		save_location = gets.chomp
 		if save_location == ""
 			save_location = "task_data.csv"
-		end
-		save_tasks(tasklist, save_location)
-		puts "Tasks saved to #{load_location}\n\n"
+		end		
 	when 1
 		display_all_tasks(tasklist)
 	when 2
@@ -190,4 +188,5 @@ end
 
 
 # Saving all tasks to task_data.csv
-save_tasks(tasklist)
+save_tasks(tasklist, "data/" + save_location)
+puts "Tasks saved to data/#{load_location}\n\n"
