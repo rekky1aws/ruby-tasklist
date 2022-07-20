@@ -61,14 +61,40 @@ def add_task (tasklist)
 	return tasklist
 end
 
+def remove_task (tasklist)
+	if tasklist.length == 0
+		puts "There is no task to delete"
+	else
+		puts "ID of the task to delete :"
+		task_id = gets.chomp.to_i
+		if tasklist.length > task_id
+			puts "Are your sure you want to delete this task :"
+			puts tasklist[task_id].to_s
+			puts "[y / N]"
+			delete_prompt = gets.chomp.downcase
+			if delete_prompt ==  'y'
+				tasklist.delete_at(task_id)
+				puts "Task #{task_id} deleted"
+			else
+				puts "Canceled task deletion"
+			end
+		else
+			puts "No task with this ID"
+		end
+	end
+	return tasklist
+end
+
 def display_menu
 	puts "########## Menu ##########"
 	puts "1 - Display Tasks"
 	puts "2 - Add Task"
+	puts "3 - Remove Task"
 
 	puts "\n0 - Quit"
 	puts "\nChoose between the options above :"
 end
+
 	
 # Reading file to get saved tasks
 tasklist = get_stored_tasks
@@ -100,6 +126,9 @@ while choice !=0
 		display_all_tasks(tasklist)
 	when 2
 		tasklist = add_task(tasklist)
+	when 3
+		display_all_tasks (tasklist)
+		tasklist = remove_task(tasklist)
 
 	else
 		puts "#{choice} is not a valid command."
