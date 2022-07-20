@@ -1,6 +1,6 @@
 class Task
 	@@id = 0
-	def initialize(priority, name, done = false, description = "")
+	def initialize(name, priority = 1, description = "", done = false)
 		@id = @@id
 		@@id += 1
 		@name = name
@@ -39,15 +39,14 @@ class Task
 		return self
 	end
 
-	def display_infos
-		puts "ID : " + @id.to_s
-		puts "Name : " + @name
-		puts "Description : " + @description
-		puts "Priority Level : " + @priority.to_s
-		if @done
-			puts "Fait."
-		else
-			puts "Pas encore fait."
-		end
+	def to_s
+		result = "Task :\n"
+		result += "\tID : " + @id.to_s + "\n"
+		result += "\tName : " + @name + "\n"
+		result += "\tDescription : " + @description + "\n"
+		result += "\tPriority Level : " + @priority.to_s + "\n"
+		result += "\tStatus : "
+		result += @done ? "Done" : "To Do"
+		result += "\n"
 	end
 end
