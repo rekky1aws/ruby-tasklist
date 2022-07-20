@@ -19,9 +19,9 @@ end
 
 def get_stored_tasks
 	result = []
-	stored_tasks = File.open("task_data.csv").read.split("\n")
+	stored_tasks = File.read("task_data.csv").split("\n")
 	stored_tasks.each do |element|
-		task_data = element.split(", ")
+		task_data = element.split(",")
 		if task_data.length == 4
 			result += [Task.new(task_data[0].to_i, task_data[1], task_data[2].to_boolean, task_data[3])]
 		elsif task_data.length == 3
@@ -35,6 +35,15 @@ def get_stored_tasks
 	end
 	return result
 end
+
+def save_tasks (tasklist)
+	result = ""
+	tasklist.each do |task_element|
+		done_flag = task_element.is_done ? "true" : "false" 
+		result += task_element.get_priority.to_s + "," + task_element.get_name + "," + done_flag + "," + task_element.get_description + "\n"
+	end
+	File.write("task_data.csv", result)
+end
 	
 tasklist = get_stored_tasks
 
@@ -43,3 +52,7 @@ tasklist.each do |task|
 	task.display_infos
 end
 puts " -----"
+
+tasklist += [Task.new(0, "Test", false, "Juste pour tester l'écriture du fichier")]
+
+save_tasks(tasklist)

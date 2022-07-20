@@ -19,7 +19,7 @@ class Task
 	end
 
 	def get_priority
-		return priority
+		return @priority
 	end
 
 	def get_name
