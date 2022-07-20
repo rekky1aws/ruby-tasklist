@@ -1,3 +1,5 @@
+#! /usr/local/bin/ruby
+
 require './task.rb'
 require './to_bool.rb'
 
