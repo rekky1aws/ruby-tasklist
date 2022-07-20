@@ -14,6 +14,17 @@ def display_all_tasks (tasklist)
 	puts " -----"
 end
 
+def display_tasks_by_status (tasklist, status = false)
+	tasklist.each do |task|
+		if task.is_done == status
+			puts " -----"
+			puts task.to_s
+		end
+	end
+	puts " -----"
+end
+
+
 def get_stored_tasks (location = "task_data.csv")
 	result = []
 	# Reading all data from file
@@ -85,25 +96,59 @@ def remove_task (tasklist)
 	return tasklist
 end
 
+def update_task (tasklist)
+	if tasklist.length == 0
+		puts "There is no tag"
+	else
+		puts "ID of the task to change status :"
+		task_id = gets.chomp.to_i
+		if tasklist.length > task_id
+			puts "Are your sure you want to change the status of this task :"
+			puts tasklist[task_id].to_s
+			puts "[Y / n]"
+			change_prompt = gets.chomp.downcase
+			if change_prompt !=  'n'
+				tasklist[task_id].change_status
+				status = tasklist[task_id].is_done ? "Done" : "To Do"
+				puts "Task #{task_id} has changed status to \"#{status}\""
+			else
+				puts "Canceled task status change"
+			end
+		else
+			puts "No task with this ID"
+		end
+	end
+	return tasklist
+end
+
 def display_menu
-	puts "########## Menu ##########"
-	puts "1 - Display Tasks"
-	puts "2 - Add Task"
-	puts "3 - Remove Task"
+	puts "\n\n########## Menu ##########"
+	puts "1 - Display All Tasks"
+	puts "2 - Display Tasks To Do"
+	puts "3 - Display Done Tasks"
+	puts "4 - Add Task"
+	puts "5 - Remove Task"
+	puts "6 - Change Task Status"
 
 	puts "\n0 - Quit"
 	puts "\nChoose between the options above :"
 end
 
-	
-# Reading file to get saved tasks
-tasklist = get_stored_tasks
-
+# Asks the name of the file to load task data
 puts "Name the file to load tasks from (default = task_data.csv) :"
 load_location = gets.chomp
 if load_location == ""
+	# Default file to load data
 	load_location = "task_data.csv"
 end
+
+# Creating file if not existing
+if !File.exist?(load_location)
+	File.write(load_location, "")
+end
+
+# Reading file to get saved tasks
+tasklist = get_stored_tasks(load_location)
 
 puts "Loaded tasks from #{load_location}\n\n"
 
@@ -111,7 +156,7 @@ choice = -1
 while choice !=0
 	display_menu
 	choice = gets.chomp.to_i
-	puts "##########################"
+	puts "##########################\n\n\n"
 
 	case choice
 	when 0
@@ -125,10 +170,17 @@ while choice !=0
 	when 1
 		display_all_tasks(tasklist)
 	when 2
-		tasklist = add_task(tasklist)
+		display_tasks_by_status(tasklist)
 	when 3
-		display_all_tasks (tasklist)
+		display_tasks_by_status(tasklist, true)
+	when 4
+		tasklist = add_task(tasklist)
+	when 5
+		display_all_tasks(tasklist)
 		tasklist = remove_task(tasklist)
+	when 6
+		display_all_tasks(tasklist)
+		tasklist = update_task (tasklist)
 
 	else
 		puts "#{choice} is not a valid command."

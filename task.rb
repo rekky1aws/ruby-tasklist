@@ -34,8 +34,8 @@ class Task
 		return @done
 	end
 
-	def set_done (done)
-		@done = done
+	def change_status
+		@done = !@done
 		return self
 	end
 
